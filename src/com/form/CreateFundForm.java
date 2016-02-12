@@ -1,3 +1,6 @@
+/**
+ * @author tpahare
+ */
 package com.form;
 
 import java.util.ArrayList;
@@ -8,7 +11,7 @@ import org.mybeans.form.FormBean;
 public class CreateFundForm extends FormBean {
 	private String fundName;
 	private String ticker;
-	private String action;
+	//private String action; REMOVE ALL ACTIONS NOW
 
 	public String getFundName() {
 		return fundName;
@@ -26,17 +29,17 @@ public class CreateFundForm extends FormBean {
 		this.ticker = ticker;
 	}
 
-	public String getAction() {
+	/*public String getAction() {
 		return action;
-	}
+	}*/
 
-	public void setAction(String action) {
+/*	public void setAction(String action) {
 		this.action = action;
 	}
 
 	public boolean isPresent() {
 		return action != null;
-	}
+	}*/
 
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
@@ -58,9 +61,9 @@ public class CreateFundForm extends FormBean {
 		if (errors.size() > 0) {
 			return errors;
 		}
-		if (!action.equals("CreateFund")) {
+		/*if (!action.equals("CreateFund")) {
 			errors.add("Invalid Action");
-		}
+		}*/
 		return errors;
 
 	}

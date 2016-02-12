@@ -1,3 +1,6 @@
+/**
+ * @author tpahare
+ */
 package com.controller;
 
 import java.util.*;
@@ -19,9 +22,6 @@ import com.view.Message;
 
 import com.databean.*;
 
-/**
- * @author Xuesong Zhang (Andrew ID: xuesongz)
- */
 public class EmployeeLoginAction extends Action {
 	private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
 	///
@@ -42,7 +42,9 @@ public class EmployeeLoginAction extends Action {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		if (session.getAttribute("employee") != null) {
-        	return "EmployeeLogin.jsp";
+			EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+			message.setMessage("Employee is already logged in as " + employee.getUsername());
+			return gson.toJson(message);
         }
 		List<String> errors = new ArrayList<String>();
         request.setAttribute("errors",errors);
@@ -60,7 +62,8 @@ public class EmployeeLoginAction extends Action {
 	        // Any validation errors?
 	        errors.addAll(form.getValidationErrors());
 	        if (errors.size() != 0) {
-	            return "EmployeeLogin.jsp";
+	        	message.setMessage(errors.toString());
+	            return gson.toJson(message);
 	        }
 
        		
@@ -70,28 +73,29 @@ public class EmployeeLoginAction extends Action {
 	        EmployeeBean employee = eDAO.read(form.getUsername());
 	        
 	        if (employee == null) {
-	            errors.add("Name not found");
-	            return "EmployeeLogin.jsp";
+	        	message.setMessage("Employee username not found");
+	            return gson.toJson(message);
 	        }
 
 	        // Check the password
 	        if (!employee.getPassword().equals(form.getPassword())) {
-	            errors.add("Incorrect password");
-	            return "EmployeeLogin.jsp";
+	        	message.setMessage("Incorrect password");
+	            return gson.toJson(message);
 	        }
 	
 	        // Attach (this copy of) the user bean to the session
 	        session.setAttribute("employee",employee);
 	        
 	        // If redirectTo is null, redirect to the "todolist" action
-			return "EmployeeLoginSuccess.jsp";
+	    	message.setMessage("Logged in successfully");
+        	return gson.toJson(message);
 			
-        } catch (RollbackException e) {
-        	errors.add(e.getMessage());
-        	return "EmployeeLogin.jsp";
-        } catch (FormBeanException e) {
-        	errors.add(e.getMessage());
-        	return "EmployeeLogin.jsp";
-        }
+        }  catch (RollbackException e) {
+			message.setMessage(e.getMessage());
+			return gson.toJson(message);
+		} catch (FormBeanException e) {
+			message.setMessage(e.getMessage());
+			return gson.toJson(message);
+		}
 	}
 }
