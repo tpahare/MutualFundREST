@@ -24,8 +24,8 @@ public class CustomerLoginAction extends Action {
 	private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
 	
 	private CustomerDAO cDAO;
-	Gson gson = new Gson();
-	Message message = new Message();
+	Gson gson = new Gson(); //first make a gson object
+	Message message = new Message(); //make an object of message
 	public  CustomerLoginAction(Model model) {
 		cDAO = model.getCustomerDAO();
 	}
@@ -38,10 +38,18 @@ public class CustomerLoginAction extends Action {
 	@Override
 	public String perform(HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		System.out.println("in perform");
+		System.out.println("in customer login action perform");
 		HttpSession session = request.getSession();
+		
+		/*
+		 * Wherever we were earlier returning jsp pages or errors. 
+		 * Now we put those in the Message.setMessage(), 
+		 * put it in gson.toJson and return that
+		 */
 		if (session.getAttribute("customer") != null) {
-			return "CustomerLoginSuccess.jsp";
+			CustomerBean customer = (CustomerBean) session.getAttribute("customer");
+			message.setMessage("Customer is already logged in as " + customer.getUsername());
+			return gson.toJson(message);
         }
 		List<String> errors = new ArrayList<String>();
         request.setAttribute("errors",errors);
@@ -68,7 +76,8 @@ public class CustomerLoginAction extends Action {
 	        // Any validation errors?
 	        errors.addAll(form.getValidationErrors());
 	        if (errors.size() != 0) {
-	            return "Errors in form";
+	            message.setMessage(errors.toString());
+	            return gson.toJson(message);
 	        }
 
        		
@@ -78,14 +87,14 @@ public class CustomerLoginAction extends Action {
 	        CustomerBean[] customer = cDAO.match(MatchArg.equals("username", form.getUsername()));
 	        
 	        if (customer.length == 0) {
-	            errors.add("Customer not found");
-	            return "customer not found";
+	        	message.setMessage("Customer username not found");
+	            return gson.toJson(message);
 	        }
 
 	        // Check the password
 	        if (!customer[0].getPassword().equals(form.getPassword())) {
-	            errors.add("Incorrect password");
-	            return "incorrect password";
+	        	message.setMessage("Incorrect password");
+	            return gson.toJson(message);
 	        }
 	
 	        // Attach (this copy of) the user bean to the session

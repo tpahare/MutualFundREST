@@ -8,7 +8,9 @@ import org.genericdao.RollbackException;
 import org.mybeans.form.FormBeanException;
 import org.mybeans.form.FormBeanFactory;
 import com.form.*;
+import com.google.gson.Gson;
 import com.model.*;
+import com.view.Message;
 
 //import edu.cmu.cs.webapp.todolist8.databean.User;
 //import edu.cmu.cs.webapp.todolist8.formbean.LoginForm;
@@ -24,6 +26,8 @@ public class EmployeeLoginAction extends Action {
 	private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
 	///
 	private EmployeeDAO eDAO;
+	Gson gson = new Gson();
+	Message message = new Message();
 	public EmployeeLoginAction(Model model) {
 		eDAO = model.getEmployeeDAO();
 	}
@@ -49,9 +53,9 @@ public class EmployeeLoginAction extends Action {
 
 	        // If no params were passed, return with no errors so that the form will be
 	        // presented (we assume for the first time).
-	        if (!form.isPresent()) {
+	       /* if (!form.isPresent()) {
 	            return "EmployeeLogin.jsp";
-	        }
+	        }*/
 
 	        // Any validation errors?
 	        errors.addAll(form.getValidationErrors());
