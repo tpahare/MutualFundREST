@@ -14,6 +14,7 @@ import org.mybeans.form.FormBeanFactory;
 import com.form.*;
 import com.google.gson.Gson;
 import com.model.*;
+import com.view.Menu;
 import com.view.Message;
 
 //import edu.cmu.cs.webapp.todolist8.databean.User;
@@ -29,7 +30,7 @@ public class CustomerLoginAction extends Action {
 	private CustomerDAO cDAO;
 	Gson gson = new Gson(); // first make a gson object
 	Message message = new Message(); // make an object of message
-
+	Menu menu = new Menu();
 	public CustomerLoginAction(Model model) {
 		cDAO = model.getCustomerDAO();
 	}
@@ -90,13 +91,13 @@ public class CustomerLoginAction extends Action {
 			CustomerBean[] customer = cDAO.match(MatchArg.equals("username", form.getUsername()));
 
 			if (customer.length == 0) {
-				message.setMessage("Customer username not found");
+				message.setMessage("The username/password combination is incorrect");
 				return gson.toJson(message);
 			}
 
 			// Check the password
 			if (!customer[0].getPassword().equals(form.getPassword())) {
-				message.setMessage("Incorrect password");
+				message.setMessage("The username/password combination is incorrect");
 				return gson.toJson(message);
 			}
 
@@ -104,8 +105,9 @@ public class CustomerLoginAction extends Action {
 			session.setAttribute("customer", customer[0]);
 
 			// If redirectTo is null, redirect to the "todolist" action
-			message.setMessage("Logged in successfully");
-			return gson.toJson(message);
+			message.setMessage("Welcome " + customer[0].getFirstname() + " " + customer[0].getLastname());
+			
+			return gson.toJson(message) + "\n" + gson.toJson(menu.customerMenu());
 		} catch (RollbackException e) {
 			message.setMessage(e.getMessage());
 			return gson.toJson(message);
