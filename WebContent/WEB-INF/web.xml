@@ -1,0 +1,42 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <display-name>Favorite Tool</display-name>
+    <description>
+      Use MVC
+    </description>
+
+
+	<session-config>
+	    <session-timeout>5</session-timeout>
+	</session-config>
+   
+   <servlet>
+        <servlet-name>  controller-servlet       </servlet-name>
+        <servlet-class>
+            com.controller.Controller
+        </servlet-class>
+        <init-param>
+          <param-name>    jdbcDriverName          </param-name> 
+	      <param-value>   com.mysql.jdbc.Driver   </param-value>
+        </init-param>
+        <init-param>
+          <param-name>    jdbcURL                 </param-name> 
+	      <param-value>   jdbc:mysql:///test      </param-value>
+        </init-param>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>  controller-servlet        </servlet-name>
+        <url-pattern>   *.do                     </url-pattern>
+    </servlet-mapping>
+    
+    
+    <welcome-file-list>
+        <welcome-file>   Index.do   </welcome-file>
+    </welcome-file-list>
+    
+</web-app>
