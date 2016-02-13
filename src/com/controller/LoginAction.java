@@ -6,7 +6,7 @@ package com.controller;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
+import org.genericdao.DuplicateKeyException;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.mybeans.form.FormBeanException;
@@ -26,58 +26,43 @@ import com.databean.*;
 
 public class LoginAction extends Action {
 	private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
-
+	///
+	private EmployeeDAO eDAO;
 	private CustomerDAO cDAO;
-	Gson gson = new Gson(); // first make a gson object
-	Message message = new Message(); // make an object of message
+	Gson gson = new Gson();
+	Message message = new Message();
 	Menu menu = new Menu();
+
 	public LoginAction(Model model) {
-		cDAO = model.getCustomerDAO();
+		eDAO = model.getEmployeeDAO();
 	}
 
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "CustomerLogin.do";
+		return "login";
 	}
 
 	@Override
 	public String perform(HttpServletRequest request) {
 		// TODO Auto-generated method stub
-		System.out.println("in customer login action perform");
 		HttpSession session = request.getSession();
-
-		/*
-		 * Wherever we were earlier returning jsp pages or errors. Now we put
-		 * those in the Message.setMessage(), put it in gson.toJson and return
-		 * that
-		 */
-		if (session.getAttribute("customer") != null) {
-			CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-			message.setMessage("Customer is already logged in as " + customer.getUsername());
-			return gson.toJson(message);
+		if (session.getAttribute("employee") != null) {
+			session.invalidate();
 		}
 		List<String> errors = new ArrayList<String>();
 		request.setAttribute("errors", errors);
 		try {
-			/*
-			 * try { ServletFileUpload upload = new ServletFileUpload();
-			 * Iterator<FileItem> iterator = (Iterator<FileItem>)
-			 * upload.getItemIterator(request); if (!iterator.hasNext()) {
-			 * errors.add("Your can not input a file"); return
-			 * "CustomerLogin.jsp"; } } catch (Exception e) {
-			 * 
-			 * }
-			 */
 			LoginForm form = formBeanFactory.create(request);
+			System.out.println(form.getUsername());
 			request.setAttribute("form", form);
 
 			// If no params were passed, return with no errors so that the form
 			// will be
 			// presented (we assume for the first time).
-			// if (!form.isPresent()) {
-			// return "Form not present";
-			// }
+			/*
+			 * if (!form.isPresent()) { return "EmployeeLogin.jsp"; }
+			 */
 
 			// Any validation errors?
 			errors.addAll(form.getValidationErrors());
@@ -88,26 +73,27 @@ public class LoginAction extends Action {
 
 			// Look up the user
 			// User user = userDAO.read(form.getUserName());
-			CustomerBean[] customer = cDAO.match(MatchArg.equals("username", form.getUsername()));
+			EmployeeBean[] employee = eDAO.match(MatchArg.and(MatchArg.equals("username",form.getUsername())),MatchArg.equals("password", form.getPassword()));
 
-			if (customer.length == 0) {
-				message.setMessage("The username/password combination is incorrect");
-				return gson.toJson(message);
-			}
+			if (employee.length == 0) {
+				CustomerBean[] customer = cDAO.match(MatchArg.and(MatchArg.equals("username", form.getUsername()),
+						MatchArg.equals("password", form.getPassword())));
+				if (customer.length != 0) {
+					session.setAttribute("customer", customer[0]);
+					message.setMessage("Welcome " + customer[0].getFirstname() + " " + customer[0].getLastname());
+					return gson.toJson(message) + "\n" + gson.toJson(menu.customerMenu());
+				}
+					message.setMessage("The username/password combination that you entered is not correct");
+					return gson.toJson(message);
+				}
 
-			// Check the password
-			if (!customer[0].getPassword().equals(form.getPassword())) {
-				message.setMessage("The username/password combination is incorrect");
-				return gson.toJson(message);
-			}
+			message.setMessage("Welcome " + employee[0].getFirstname() + " " + employee[0].getLastname());
+			// Attach (this copy of) the employee bean to the session
+			session.setAttribute("employee", employee[0]);
 
-			// Attach (this copy of) the user bean to the session
-			session.setAttribute("customer", customer[0]);
+		
+			return gson.toJson(message) + "\n" + gson.toJson(menu.employeeMenu());
 
-			// If redirectTo is null, redirect to the "todolist" action
-			message.setMessage("Welcome " + customer[0].getFirstname() + " " + customer[0].getLastname());
-			
-			return gson.toJson(message) + "\n" + gson.toJson(menu.customerMenu());
 		} catch (RollbackException e) {
 			message.setMessage(e.getMessage());
 			return gson.toJson(message);
