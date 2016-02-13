@@ -8,15 +8,15 @@ import com.view.Message;
 
 /**
  * 
- * @author faisalshahnewaz
+ * @author tpahare
  *
  */
 
-public class CustomerLogoutAction extends Action{
+public class LogoutAction extends Action{
 
 	@Override
 	public String getName() {
-		return "CustomerLogout.do";
+		return "logout.do";
 	}
 
 	@Override
@@ -27,8 +27,9 @@ public class CustomerLogoutAction extends Action{
 		Gson gson = new Gson();
     	HttpSession session = request.getSession(false);
         session.setAttribute("customer",null);
+        session.setAttribute("employee", null);
         session.invalidate();
-        message.setMessage("Logged Out Successfully");
+        message.setMessage("You have been logged out");
 		return gson.toJson(message);
 	}
 

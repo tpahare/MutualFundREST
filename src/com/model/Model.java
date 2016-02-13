@@ -22,12 +22,12 @@ public class Model {
 			
 			ConnectionPool pool = new ConnectionPool(jdbcDriverName,jdbcURL);
 	        
-			employeeDAO = new EmployeeDAO(pool, "task7_employee");
-            customerDAO = new CustomerDAO(pool,  "task7_customer");
-            fundDAO = new FundDAO(pool, "task7_fund");
-            trancDAO = new TrancDAO(pool, "task7_transaction");
-            fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "task7_fund_price_history");
-            positionDAO = new PositionDAO(pool, "task7_position");
+			employeeDAO = new EmployeeDAO(pool, "task8_employee");
+            customerDAO = new CustomerDAO(pool,  "task8_customer");
+            fundDAO = new FundDAO(pool, "task8_fund");
+            trancDAO = new TrancDAO(pool, "task8_transaction");
+            fundPriceHistoryDAO = new FundPriceHistoryDAO(pool, "task8_fund_price_history");
+            positionDAO = new PositionDAO(pool, "task8_position");
             if(employeeDAO.getCount()==0) new DataLoader(employeeDAO);
 		} catch (DAOException e) {
 			throw new ServletException(e);

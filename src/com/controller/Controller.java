@@ -27,7 +27,7 @@ public class Controller extends HttpServlet {
         
         Action.add(new IndexAction(model));
         Action.add(new EmployeeLoginAction(model));
-        Action.add(new CustomerLoginAction(model));
+        Action.add(new LoginAction(model));
         Action.add(new ChangeEmployeePasswordAction(model));
         Action.add(new ChangeCustomerPasswordAction(model));
         Action.add(new CreateEmployeeAction(model));
@@ -41,7 +41,7 @@ public class Controller extends HttpServlet {
         Action.add(new BuyFundAction(model));
         Action.add(new BuyFundFromResearchFundAction(model));
         Action.add(new ViewTransactionHistory(model));
-        Action.add(new CustomerLogoutAction());
+        Action.add(new LogoutAction());
         Action.add(new ViewAccount(model));
         Action.add(new ViewSelfTransactionHistory(model));
         Action.add(new RequestCheckAction(model));

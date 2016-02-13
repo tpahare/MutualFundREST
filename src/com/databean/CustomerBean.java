@@ -3,7 +3,7 @@ package com.databean;
 import org.genericdao.PrimaryKey;
 
 /**
- * @author Xuesong Zhang (Andrew ID: xuesongz)
+ * @author tpahare
  */
 
 @PrimaryKey("cid")

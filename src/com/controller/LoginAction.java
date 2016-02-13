@@ -24,14 +24,14 @@ import com.view.Message;
 
 import com.databean.*;
 
-public class CustomerLoginAction extends Action {
+public class LoginAction extends Action {
 	private FormBeanFactory<LoginForm> formBeanFactory = FormBeanFactory.getInstance(LoginForm.class);
 
 	private CustomerDAO cDAO;
 	Gson gson = new Gson(); // first make a gson object
 	Message message = new Message(); // make an object of message
 	Menu menu = new Menu();
-	public CustomerLoginAction(Model model) {
+	public LoginAction(Model model) {
 		cDAO = model.getCustomerDAO();
 	}
 
