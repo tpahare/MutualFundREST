@@ -38,7 +38,7 @@ public class CreateCustomerAction extends Action{
 	@Override
 	public String getName() {
 		
-		return "CreateCustomer.do";
+		return "createCustomerAccount";
 	}
 
 	@Override

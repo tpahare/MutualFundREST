@@ -34,9 +34,13 @@
         <url-pattern>   /login                    </url-pattern>
     </servlet-mapping>
     
+     <servlet-mapping>
+        <servlet-name>  controller-servlet        </servlet-name>
+        <url-pattern>   /createCustomerAccount                    </url-pattern>
+    </servlet-mapping>
     
     <welcome-file-list>
-        <welcome-file>   /login   </welcome-file>
+        <welcome-file>   login   </welcome-file>
     </welcome-file-list>
     
 </web-app>
