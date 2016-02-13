@@ -16,20 +16,20 @@ public class CreateCustomerForm extends FormBean{
 	private String firstname;
 	private String lastname;
 	private String password;
-	private String confirmpassword;
-	private String addrline1;
-	private String addrline2;
+//	private String confirmpassword;
+	private String addr_line1;
+	private String addr_line2;
 	private String city;
 	private String state;
 	private String zip;
-	private String action;
+//	private String action;
 	
-	public String getAction() {
-		return action;
-	}
-	public void setAction(String action) {
-		this.action = action;
-	}
+//	public String getAction() {
+//		return action;
+//	}
+//	public void setAction(String action) {
+//		this.action = action;
+//	}
 	public String getUsername() {
 		return username;
 	}
@@ -55,16 +55,16 @@ public class CreateCustomerForm extends FormBean{
 		this.password = password;
 	}
 	public String getAddrline1() {
-		return addrline1;
+		return addr_line1;
 	}
 	public void setAddrline1(String addrline1) {
-		this.addrline1 = trimAndConvert(addrline1, "<>\"");
+		this.addr_line1 = trimAndConvert(addrline1, "<>\"");
 	}
 	public String getAddrline2() {
-		return addrline2;
+		return addr_line2;
 	}
 	public void setAddrline2(String addrline2) {
-		this.addrline2 = trimAndConvert(addrline2, "<>\"");
+		this.addr_line2 = trimAndConvert(addrline2, "<>\"");
 	}
 	public String getCity() {
 		return city;
@@ -84,15 +84,15 @@ public class CreateCustomerForm extends FormBean{
 	public void setZip(String zip) {
 		this.zip = trimAndConvert(zip, "<>\"");
 	}
-	public String getConfirmpassword() {
-		return confirmpassword;
-	}
-	public void setConfirmpassword(String confirmpassword) {
-		this.confirmpassword = confirmpassword;
-	}
-	public boolean isPresent() {
-		return action != null;
-	}
+//	public String getConfirmpassword() {
+//		return confirmpassword;
+//	}
+//	public void setConfirmpassword(String confirmpassword) {
+//		this.confirmpassword = confirmpassword;
+//	}
+//	public boolean isPresent() {
+//		return action != null;
+//	}
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
 
@@ -118,12 +118,12 @@ public class CreateCustomerForm extends FormBean{
 			errors.add("Password is required");
 		}
 		
-		if ( confirmpassword == null || confirmpassword.length() == 0) {
-			System.out.println("q5");
-			errors.add("Confirm Password is required");
-		}
+//		if ( confirmpassword == null || confirmpassword.length() == 0) {
+//			System.out.println("q5");
+//			errors.add("Confirm Password is required");
+//		}
 		
-		if ( addrline1 == null || addrline1.length() == 0) {
+		if ( addr_line1 == null || addr_line1.length() == 0) {
 			System.out.println("q6");
 			errors.add("Address is required");
 		}
@@ -148,12 +148,12 @@ public class CreateCustomerForm extends FormBean{
 			return errors;
 		}
 		//check pass and confirm pass match?
-		if(!password.equals(confirmpassword)){
-			errors.add("Passwords do not match");
-		}
-		if(!action.equals("confirm")){
-			errors.add("Invalid Action");
-		}
+//		if(!password.equals(confirmpassword)){
+//			errors.add("Passwords do not match");
+//		}
+//		if(!action.equals("confirm")){
+//			errors.add("Invalid Action");
+//		}
 		
 		if(firstname.matches(".*[<>\"].*")){
 			errors.add("First Name may not contain angle brackets or quotes");
@@ -167,11 +167,11 @@ public class CreateCustomerForm extends FormBean{
 			errors.add("Username may not contain angle brackets or quotes");
 		}
 		
-		if(addrline1.matches(".*[<>\"].*")){
+		if(addr_line1.matches(".*[<>\"].*")){
 			errors.add("Address Line 1 may not contain angle brackets or quotes");
 		}
 		
-		if(addrline2.matches(".*[<>\"].*")){
+		if(addr_line2.matches(".*[<>\"].*")){
 			errors.add("Address Line 2 may not contain angle brackets or quotes");
 		}
 		
@@ -198,10 +198,10 @@ public class CreateCustomerForm extends FormBean{
 			return errors;
 		}
 		
-		if(confirmpassword.matches(".*\\s+.*")) {
-			errors.add("Confirm Password can not contain any white space");
-			return errors;
-		}
+//		if(confirmpassword.matches(".*\\s+.*")) {
+//			errors.add("Confirm Password can not contain any white space");
+//			return errors;
+//		}
 
 		return errors;
 	}
