@@ -86,7 +86,7 @@ public class CreateCustomerAction extends Action{
 		        if(customerBean.length>0) {
 //		        	errors.add("Username already exists");
 //		        	return "CreateCustomer.jsp";
-		        	message.setMessage("I am sorry there was problem creating the account 1");
+		        	message.setMessage("I am sorry there was problem creating the account(Duplicate Account)");
 		        	return gson.toJson(message);
 		        }
 		        
