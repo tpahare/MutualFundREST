@@ -35,6 +35,7 @@ public class LoginAction extends Action {
 
 	public LoginAction(Model model) {
 		eDAO = model.getEmployeeDAO();
+		cDAO = model.getCustomerDAO();
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class LoginAction extends Action {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		if (session.getAttribute("employee") != null) {
-			session.invalidate();
+			//session.invalidate();
 		}
 		List<String> errors = new ArrayList<String>();
 		request.setAttribute("errors", errors);
@@ -80,6 +81,7 @@ public class LoginAction extends Action {
 						MatchArg.equals("password", form.getPassword())));
 				if (customer.length != 0) {
 					session.setAttribute("customer", customer[0]);
+					session.setAttribute("employee", null);
 					message.setMessage("Welcome " + customer[0].getFirstname() + " " + customer[0].getLastname());
 					return gson.toJson(message) + "\n" + gson.toJson(menu.customerMenu());
 				}
@@ -90,7 +92,7 @@ public class LoginAction extends Action {
 			message.setMessage("Welcome " + employee[0].getFirstname() + " " + employee[0].getLastname());
 			// Attach (this copy of) the employee bean to the session
 			session.setAttribute("employee", employee[0]);
-
+			session.setAttribute("customer", null);
 		
 			return gson.toJson(message) + "\n" + gson.toJson(menu.employeeMenu());
 
