@@ -34,7 +34,7 @@ public class DepositeCheckAction extends Action {
 	}
 	@Override
 	public String getName() {
-		return "DepositCheck.do";
+		return "depositCheck";
 	}
 
 	@Override
