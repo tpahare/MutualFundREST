@@ -9,24 +9,24 @@ import java.util.List;
 import org.mybeans.form.FormBean;
 
 public class CreateFundForm extends FormBean {
-	private String fundName;
-	private String ticker;
+	private String name;
+	private String symbol;
 	//private String action; REMOVE ALL ACTIONS NOW
 
-	public String getFundName() {
-		return fundName;
+	public String getName() {
+		return name;
 	}
 
-	public void setFundName(String fundName) {
-		this.fundName = fundName;
+	public void setName(String fundName) {
+		this.name = fundName;
 	}
 
-	public String getTicker() {
-		return ticker;
+	public String getSymbol() {
+		return symbol;
 	}
 
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
+	public void setSymbol(String ticker) {
+		this.symbol = ticker;
 	}
 
 	/*public String getAction() {
@@ -43,19 +43,19 @@ public class CreateFundForm extends FormBean {
 
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
-		if (fundName == null || fundName.trim().length() == 0) {
+		if (name == null || name.trim().length() == 0) {
 			errors.add("Fund Name is required");
 		}
-		if (fundName.matches(".*[<>\"].*")) {
+		if (name.matches(".*[<>\"].*")) {
 			errors.add("Fund name may not contain angle brackets or quotes");
 		}
-		if (ticker == null || ticker.trim().length() == 0) {
+		if (symbol == null || symbol.trim().length() == 0) {
 			errors.add("Ticker is required");
 		}
-		if (ticker.matches(".*[<>\"].*")) {
+		if (symbol.matches(".*[<>\"].*")) {
 			errors.add("Ticker may not contain angle brackets or quotes");
 		}
-		if (ticker.trim().length() > 5) {
+		if (symbol.trim().length() > 5) {
 			errors.add("Ticker length cannot exceed 5 characters");
 		}
 		if (errors.size() > 0) {

@@ -1,6 +1,11 @@
+/**
+ * @author tpahare
+ */
 package com.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,26 +18,29 @@ import org.mybeans.form.FormBeanFactory;
 
 import com.databean.EmployeeBean;
 import com.databean.FundBean;
+import com.databean.FundPriceHistoryBean;
 import com.form.CreateFundForm;
 import com.google.gson.Gson;
 import com.model.FundDAO;
+import com.model.FundPriceHistoryDAO;
 import com.model.Model;
 import com.view.Message;
 
 public class CreateFundAction extends Action {
 	private FormBeanFactory<CreateFundForm> formBeanFactory = FormBeanFactory.getInstance(CreateFundForm.class);
 	FundDAO fundDAO;
-
+	FundPriceHistoryDAO fphDAO;
 	Gson gson = new Gson();
 	Message message = new Message();
 
 	public CreateFundAction(Model model) {
 		this.fundDAO = model.getFundDAO();
+		this.fphDAO = model.getFundPriceHistoryDAO();
 	}
 
 	@Override
 	public String getName() {
-		return "CreateFund.do";
+		return "createFund";
 	}
 
 	@Override
@@ -46,17 +54,13 @@ public class CreateFundAction extends Action {
 		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
 
 		if (employee == null) {
-			message.setMessage("Please login first");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 
 		try {
 			CreateFundForm form = formBeanFactory.create(request);
 			request.setAttribute("form", form);
-
-			if (!form.isPresent()) {
-				return "CreateFund.jsp";
-			}
 
 			errors.addAll(form.getValidationErrors());
 
@@ -65,24 +69,33 @@ public class CreateFundAction extends Action {
 				return gson.toJson(message);
 			}
 
-			FundBean[] fund = fundDAO.match(MatchArg.equals("fundName", form.getFundName()));
+			FundBean[] fund = fundDAO.match(MatchArg.equals("name", form.getName()));
 			if (fund.length != 0) {
-				message.setMessage("Fund by the name \"" + form.getFundName() + "\" already exists");
+				message.setMessage("I'm sorry, there was a problem creating the fund");
 				return gson.toJson(message);
 			}
 
-			fund = fundDAO.match(MatchArg.equals("ticker", form.getTicker()));
+			fund = fundDAO.match(MatchArg.equals("symbol", form.getSymbol()));
 			if (fund.length != 0) {
-				message.setMessage("Ticker already exists for the fund \"" + fund[0].getFundName() + "\"");
+				message.setMessage("I'm sorry, there was a problem creating the fund");
 				return gson.toJson(message);
 			}
 
 			FundBean newFund = new FundBean();
 
-			newFund.setTicker(form.getTicker());
-			newFund.setFundName(form.getFundName());
+			newFund.setSymbol(form.getSymbol());
+			newFund.setName(form.getName());
 			fundDAO.create(newFund);
-			message.setMessage("Fund " + newFund.getFundName() + "(" + newFund.getTicker() + ") created successfully");
+			FundBean[] fund2 = fundDAO.match(MatchArg.equals("name", form.getName()));
+			FundPriceHistoryBean fphBean = new FundPriceHistoryBean();
+
+			fphBean.setFundid(fund2[0].getFundid());
+			fphBean.setPrice(10);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			Date date = new Date();
+			fphBean.setPricedate(dateFormat.format(date));
+			fphDAO.create(fphBean);
+			message.setMessage("The fund has been successfully created");
 			return gson.toJson(message);
 		} catch (RollbackException e) {
 			message.setMessage(e.getMessage());
