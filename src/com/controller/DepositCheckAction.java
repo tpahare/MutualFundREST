@@ -22,13 +22,13 @@ import com.model.TrancDAO;
 import com.view.Menu;
 import com.view.Message;
 
-public class DepositeCheckAction extends Action {
+public class DepositCheckAction extends Action {
 	private FormBeanFactory<DepositeCheckForm> formBeanFactory = FormBeanFactory.getInstance(DepositeCheckForm.class);
 	CustomerDAO customerDAO;
 	TrancDAO trancDAO;
 	Gson gson = new Gson();
 	Message message = new Message();
-	public DepositeCheckAction(Model model) {
+	public DepositCheckAction(Model model) {
 		this.customerDAO = model.getCustomerDAO();
 		this.trancDAO = model.getTrancDAO();
 	}
