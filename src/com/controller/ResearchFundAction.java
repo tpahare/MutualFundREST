@@ -63,7 +63,7 @@ public class ResearchFundAction extends Action {
 						fundList = fundDAO.getFundList();
 						request.setAttribute("fundList", fundList);
 
-					} else if (form.getAction().equals("SearchFundName")) {
+					} else if (form.getAction().equals("SearchName")) {
 						// check if any validation error
 						errors.addAll(form.getValidationErrors());
 						if (errors.size() > 0) {
@@ -105,10 +105,10 @@ public class ResearchFundAction extends Action {
 				fundBeans.add(fundBean);
 			}
 			FundBean fund = fundDAO.read(fundid);
-			request.setAttribute("fundName", fund.getFundName());
+			request.setAttribute("fundName", fund.getName());
 			request.setAttribute("fundBeans", fundBeans);
 			request.setAttribute("fundHistory", fundHistory);
-			request.setAttribute("tickerName", fund.getTicker());
+			request.setAttribute("tickerName", fund.getSymbol());
 			return "ResearchFund.jsp";
 		} catch (RollbackException e) {
 			errors.add("Exception");
