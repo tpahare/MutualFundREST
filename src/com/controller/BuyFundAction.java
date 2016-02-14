@@ -54,6 +54,12 @@ public class BuyFundAction extends Action {
 			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
+		
+		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		if(employee == null){
+			message.setMessage("I'm sorry you are not authorized to preform that action");
+			return gson.toJson(message);
+		}
 		try {
 //			BuyFundForm form = formBeanFactory.create(request);
 //			request.setAttribute("form", form);
@@ -70,7 +76,7 @@ public class BuyFundAction extends Action {
 			String fundSymbol = request.getParameter("fundSymbol");
 			//CustomerBean c = (CustomerBean) session.getAttribute("customer");
 			CustomerBean c = cDAO.read(customer.getCid());
-			FundBean[] fb = fDAO.match(MatchArg.equals("ticker", fundSymbol));
+			FundBean[] fb = fDAO.match(MatchArg.equals("symbol", fundSymbol));
 //			if (fb.length == 0) {
 //				errors.add("This fund does not exist");
 //				return "BuyFund.jsp";
@@ -100,7 +106,7 @@ public class BuyFundAction extends Action {
 			DecimalFormat df = new DecimalFormat("0.00");
 			String tmpAmount = df.format(amount);
 			double amount1 = Double.parseDouble(tmpAmount);
-			long money = (long) (100 * amount1);
+			long money = (long) (amount1);
 			TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
 			long cash = c.getCash();
 			for (int i = 0; i < tb.length; i++) {
@@ -120,7 +126,8 @@ public class BuyFundAction extends Action {
 			transaction.setTransactiontype("buy");
 			tDAO.create(transaction);
 			
-			return "BuyFundSuccessfully.jsp";
+			message.setMessage("The purchase was successfully completed");
+			return gson.toJson(message);
 		} 
 		
 //		catch (FormBeanException e) {

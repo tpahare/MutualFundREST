@@ -1,6 +1,8 @@
 package com.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -113,17 +115,18 @@ public class DepositCheckAction extends Action {
 			
 			
 			//System.out.println("hh");
-			
+			SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
+			CustomerBean customer = customerDAO.read(id);
 			TransactionBean tBean = new TransactionBean();
 			tBean.setCid(id);
 			tBean.setTransactiontype("deposit");
-			
-			long depositmoney = (long) (100 * Double.parseDouble(form.getCash()));
-			
+			tBean.setExecutedate(format.format(new Date()));
+			long depositmoney = (long) (Double.parseDouble(form.getCash()));
+			customer.setCash(customer.getCash()+depositmoney);
 			tBean.setAmount(depositmoney);
 			
 			trancDAO.create(tBean);
-			
+			customerDAO.update(customer);
 			//System.out.print("look 5");
 			message.setMessage("The account has been successfully updated");
 			return gson.toJson(message);
