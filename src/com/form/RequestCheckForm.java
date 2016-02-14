@@ -62,12 +62,12 @@ public class RequestCheckForm extends FormBean {
 				errors.add("Amount cannot be more than $1,000,000");
 				return errors;
 			}
-//			System.out.println("---");
+/*//			System.out.println("---");
 			BigDecimal amountBD = new BigDecimal(cashValue);
 			if (amountBD.scale() > 2){
 				errors.add("Amount should have at most two decimal places");
 				return errors;
-			}
+			}*/
 			
 		} catch(Exception ex){
 			errors.add("Please enter a valid amount");
