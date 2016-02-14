@@ -2,7 +2,9 @@ package com.controller;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,46 +19,52 @@ import com.databean.CustomerBean;
 import com.databean.TransactionBean;
 import com.form.DepositeCheckForm;
 import com.form.RequestCheckForm;
+import com.google.gson.Gson;
 import com.model.CustomerDAO;
 import com.model.Model;
 import com.model.TrancDAO;
+import com.view.Message;
 
 public class RequestCheckAction extends Action {
 	private FormBeanFactory<RequestCheckForm> formBeanFactory = FormBeanFactory.getInstance(RequestCheckForm.class);
 	CustomerDAO customerDAO;
 	TrancDAO tDAO;
+	Message message = new Message();
+	Gson gson = new Gson();
 	public RequestCheckAction(Model model) {
 		this.customerDAO = model.getCustomerDAO();
 		this.tDAO = model.getTrancDAO();
 	}
 	@Override
 	public String getName() {
-		return "RequestCheck.do";
+		return "requestCheck";
 	}
 
 	@Override
 	public String perform(HttpServletRequest request) {
 		List<String> errors = new ArrayList<String>();
-		request.setAttribute("errors", errors);
+		//request.setAttribute("errors", errors);
 		HttpSession session = request.getSession();
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
 		if(customer == null){
-			errors.add("Please login first");
-			return "CustomerLogin.do";
+			message.setMessage("You must log in prior to making this request");
+			return gson.toJson(message);
 		}
 		try{
 			RequestCheckForm form = formBeanFactory.create(request);
 			request.setAttribute("form",form);
 			
-			if(!form.isPresent()){
+			/*if(!form.isPresent()){
 				return "RequestCheck.jsp";
 			}
-			
+			*/
 			
 			errors.addAll(form.getValidationErrors());
 			
+			//remove
 			if(errors.size() > 0){
-				return "RequestCheck.jsp";
+				message.setMessage("Errors");
+				gson.toJson(message);
 			}
 			
 //			try {
@@ -81,38 +89,39 @@ public class RequestCheckAction extends Action {
 			tBean.setCid(customer.getCid());
 			tBean.setTransactiontype("request");
 			
-			long requestmoney = (long) (100 * Double.parseDouble(form.getAmount()));
-			TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
-			CustomerBean c = customerDAO.read(customer.getCid());
-			long cash = c.getCash();
-			for (int i = 0; i < tb.length; i++) {
+			long requestMoney = (long) (Double.parseDouble(form.getCashValue()));
+			//TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
+			//CustomerBean c = customerDAO.read(customer.getCid());
+			long cash = customer.getCash();
+		/*	for (int i = 0; i < tb.length; i++) {
 				if (tb[i].getTransactiontype().equals("buy") && tb[i].getCid() == customer.getCid()) {
 					cash -= tb[i].getAmount();
 				}
 				if (tb[i].getTransactiontype().equals("request") && tb[i].getCid() == customer.getCid()) {
 					cash -= tb[i].getAmount();
 				}
-			}
-			if (cash - requestmoney < 0) {
-				errors.add("Sorry you don't have enough money");
-				return "RequestCheck.jsp";
+			}*/
+			if (cash - requestMoney < 0) {
+				message.setMessage("I'm sorry, the amount requested is greater than the balance of your account");
+				return gson.toJson(message);
 			}
 			
-			tBean.setAmount(requestmoney);
+			tBean.setAmount(requestMoney);
+			tBean.setExecutedate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 			tDAO.create(tBean);
-			
-			System.out.print("look 5");
-			
-			return "RequestCheckSuccess.jsp";
+			customer.setCash(cash-requestMoney);
+			customerDAO.update(customer);
+			//System.out.print("look 5");
+			message.setMessage("The withdrawal was successfully completed");
+			return gson.toJson(message);
 		}catch (RollbackException e) {
-        	errors.add(e.getMessage());
-        	return "error.jsp";
+        	message.setMessage("Rollback Exception");
+        	return gson.toJson(message);
         } catch (FormBeanException e) {
-        	errors.add(e.getMessage());
-        	return "error.jsp";
+        	message.setMessage("Form Exception");
+        	return gson.toJson(message);
         }
-		
-		
+
 	}
 
 }

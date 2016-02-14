@@ -94,7 +94,7 @@ public class LoginAction extends Action {
 			session.setAttribute("employee", employee[0]);
 			session.setAttribute("customer", null);
 		
-			return gson.toJson(message) + "\n" + gson.toJson(menu.employeeMenu());
+			return gson.toJson(message)  + gson.toJson(menu.employeeMenu());
 
 		} catch (RollbackException e) {
 			message.setMessage(e.getMessage());

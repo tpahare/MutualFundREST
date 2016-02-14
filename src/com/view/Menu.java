@@ -11,9 +11,10 @@ public class Menu {
 	}
 	public List<Menu> customerMenu(){
 		List<Menu> customerMenu = new ArrayList<Menu>();
-		customerMenu.add(new Menu("/portfolio", "View portfolio"));
+		customerMenu.add(new Menu("/viewPortfolio", "View portfolio"));
 		customerMenu.add(new Menu("/buyFund","Buy Fund"));
 		customerMenu.add(new Menu("/logout","Logout from application"));
+		customerMenu.add(new Menu("/requestCheck","Request a check"));
 		return customerMenu;
 	}
 	public List<Menu> employeeMenu(){
