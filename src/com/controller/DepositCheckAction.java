@@ -48,14 +48,18 @@ public class DepositCheckAction extends Action {
 		request.setAttribute("errors", errors);
 		
 		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		CustomerBean customer1 = (CustomerBean) session.getAttribute("customer");
 		
 		if(employee == null) {
-			errors.add("You must log in prior to making this request");
-			message.setMessage(errors.toString());
-			gson.toJson(message);
-			//return "EmployeeLogin.do";
+			
+			if(customer1 != null) {
+				message.setMessage("I am sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			message.setMessage("You must log in prior to make that request");
 			return gson.toJson(message);
 		}
+		
 
 		try{
 //			String customer = request.getParameter("username");

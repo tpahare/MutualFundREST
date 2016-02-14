@@ -55,6 +55,12 @@ public class BuyFundAction extends Action {
 			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
+		
+		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		if(employee == null){
+			message.setMessage("I'm sorry you are not authorized to preform that action");
+			return gson.toJson(message);
+		}
 		try {
 
 			String fundSymbol = request.getParameter("fundSymbol");

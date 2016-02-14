@@ -16,6 +16,7 @@ import org.mybeans.form.FormBeanException;
 import org.mybeans.form.FormBeanFactory;
 
 import com.databean.CustomerBean;
+import com.databean.EmployeeBean;
 import com.databean.TransactionBean;
 import com.form.DepositeCheckForm;
 import com.form.RequestCheckForm;
@@ -46,10 +47,19 @@ public class RequestCheckAction extends Action {
 		//request.setAttribute("errors", errors);
 		HttpSession session = request.getSession();
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-		if(customer == null){
-			message.setMessage("You must log in prior to making this request");
+		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		
+		if(employee == null) {
+			
+			if(customer != null) {
+				message.setMessage("I am sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			
+			message.setMessage("You must log in prior to make that request");
 			return gson.toJson(message);
 		}
+		
 		try{
 			RequestCheckForm form = formBeanFactory.create(request);
 			request.setAttribute("form",form);
