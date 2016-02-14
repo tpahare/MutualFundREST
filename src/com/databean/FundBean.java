@@ -9,8 +9,8 @@ import org.genericdao.PrimaryKey;
 public class FundBean {
 
 	private int fundid;
-	private String fundName;
-	private String ticker;
+	private String name;
+	private String symbol;
 	
 	public int getFundid() {
 		return fundid;
@@ -20,19 +20,19 @@ public class FundBean {
 		this.fundid = fundid;
 	}
 	
-	public String getFundName() {
-		return fundName;
+	public String getName() {
+		return name;
 	}
 	
-	public void setFundName(String name) {
-		this.fundName = name;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public String getTicker() {
-		return ticker;
+	public String getSymbol() {
+		return symbol;
 	}
 	
-	public void setTicker(String ticker) {
-		this.ticker = ticker;
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 }

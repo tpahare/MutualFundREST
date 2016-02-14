@@ -16,7 +16,7 @@ public class LogoutAction extends Action{
 
 	@Override
 	public String getName() {
-		return "logout.do";
+		return "logout";
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class LogoutAction extends Action{
         session.setAttribute("customer",null);
         session.setAttribute("employee", null);
         session.invalidate();
-        message.setMessage("You have been logged out");
+        message.setMessage("You've been logged out");
 		return gson.toJson(message);
 	}
 
