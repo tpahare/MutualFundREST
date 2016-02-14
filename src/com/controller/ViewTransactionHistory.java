@@ -81,7 +81,7 @@ public class ViewTransactionHistory extends Action{
 			
 			for (int i = 0; i < transactionBeans.length; i++) {
 				
-				System.out.println("FundName:" + transactionBeans[i].getFundid());
+				System.out.println("Name:" + transactionBeans[i].getFundid());
 				
 				ViewTransactionBean viewTransaction = new ViewTransactionBean();
 				
@@ -89,11 +89,11 @@ public class ViewTransactionHistory extends Action{
 				
 				if(transactionBeans[i].getFundid() != 0) {
 					FundBean fund = fDAO.read(transactionBeans[i].getFundid());
-					viewTransaction.setFundname(fund.getFundName());
+					viewTransaction.setFundname(fund.getName());
 				}
 				
 				
-				//System.out.println("FundName:" + fund.getFundName());
+				//System.out.println("Name:" + fund.getName());
 				
 				//FundPriceHistoryBean fphBean = fphDAO.read(transactionBeans[i].getFundid(),transactionBeans[i].getExecutedate());
 				if (transactionBeans[i].getExecutedate() == null) {

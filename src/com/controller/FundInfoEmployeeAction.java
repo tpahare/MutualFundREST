@@ -67,7 +67,7 @@ public class FundInfoEmployeeAction extends Action {
 			for (int i = 0; i < pb.length; i++) {
 				FundBean fb = fDAO.read(pb[i].getFundid());
 				long recentPrice = fphDAO.getRecentPrice(pb[i].getFundid());
-				fundInfo.add(new FundInfoBean(fb.getFundid(), fb.getTicker(), fb.getFundName(), pb[i].getShares(), recentPrice * pb[i].getShares()));
+				fundInfo.add(new FundInfoBean(fb.getFundid(), fb.getSymbol(), fb.getName(), pb[i].getShares(), recentPrice * pb[i].getShares()));
 			}
 			return "FundInfoEmployee.jsp";
 		} catch (RollbackException e) {
