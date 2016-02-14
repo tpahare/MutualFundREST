@@ -8,7 +8,7 @@ import org.mybeans.form.FormBean;
 public class DepositeCheckForm extends FormBean {
 	private String username;
 	private String cash;
-	private String action;
+	//private String action;
 
 	public String getUsername() {
 		return username;
@@ -26,7 +26,7 @@ public class DepositeCheckForm extends FormBean {
 		this.cash = cash;
 	}
 
-	public String getAction() {
+/*	public String getAction() {
 		return action;
 	}
 
@@ -36,7 +36,7 @@ public class DepositeCheckForm extends FormBean {
 
 	public boolean isPresent() {
 		return action != null;
-	}
+	}*/
 
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
@@ -71,10 +71,10 @@ public class DepositeCheckForm extends FormBean {
 				errors.add("Amount should be Less than one million");
 				return errors;
 			}
-			if (!action.equals("DepositCheck")) {
+		/*	if (!action.equals("DepositCheck")) {
 				errors.add("Invalid Action");
 				return errors;
-			}
+			}*/
 			
 			return errors;
 		} catch (Exception e) {
