@@ -81,6 +81,10 @@ public class DepositeCheckAction extends Action {
 			}
 	        request.setAttribute("username", username);
 	        CustomerBean[] customerBean = customerDAO.match(MatchArg.equals("username", username));
+	        if(customerBean.length==0){
+	        	message.setMessage("Incorrect username");
+	        	return gson.toJson(message);
+	        }
 	        int id = customerBean[0].getCid();
 			
 //			if(!form.isPresent()){
