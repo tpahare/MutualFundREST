@@ -24,7 +24,7 @@ public class BuyFundAction extends Action {
 	TrancDAO tDAO;
 	FundDAO fDAO;
 	FundPriceHistoryDAO fphDAO;
-	
+	PositionDAO pDAO;
 	Gson gson = new Gson();
 	Message message = new Message();
 	
@@ -33,6 +33,7 @@ public class BuyFundAction extends Action {
 		tDAO = model.getTrancDAO();
 		fDAO = model.getFundDAO();
 		fphDAO = model.getFundPriceHistoryDAO();
+		pDAO = model.getPosDAO();
 	}
 	@Override
 	public String getName() {
@@ -55,80 +56,37 @@ public class BuyFundAction extends Action {
 			return gson.toJson(message);
 		}
 		try {
-//			BuyFundForm form = formBeanFactory.create(request);
-//			request.setAttribute("form", form);
-//			FundBean[] fundList = fDAO.getFundList();
-//			request.setAttribute("fundList", fundList);
-//			if (!form.isPresent()) {
-//				return "BuyFund.jsp";
-//			}
-//			errors.addAll(form.getValidationErrors());
-//			if (errors.size() > 0) {
-//				return "BuyFund.jsp";
-//			}
-//			String fundsymbol = form.getFundsymbol();
+
 			String fundSymbol = request.getParameter("fundSymbol");
-			//CustomerBean c = (CustomerBean) session.getAttribute("customer");
-			CustomerBean c = cDAO.read(customer.getCid());
-			FundBean[] fb = fDAO.match(MatchArg.equals("symbol", fundSymbol));
-//			if (fb.length == 0) {
-//				errors.add("This fund does not exist");
-//				return "BuyFund.jsp";
-//			}
-//			try {
-//				double tmp = Double.parseDouble(form.getMoney());
-//			} catch (Exception e) {
-//				errors.add("Dollar Amount should be a number");
-//				return "BuyFund.jsp";
-//			}
-			TransactionBean transaction = new TransactionBean();
-			//parse the money
-			BigDecimal bg = new BigDecimal(request.getParameter("cashValue"));
-//			if (bg.doubleValue() <= 0) {
-//				errors.add("Dollar Amount can not be negative");
-//				return "BuyFund.jsp";
-//			}
-//			if (bg.scale() > 2) {
-//				errors.add("Dollar Amount should have at most two decimal places");
-//				return "BuyFund.jsp";
-//			}
-//			if (bg.doubleValue() < 1) {
-//				errors.add("Dollar amount should not be less than 1 dollar");
-//				return "BuyFund.jsp";
-//			}
-			Double amount = Double.parseDouble(request.getParameter("cashValue"));
-			DecimalFormat df = new DecimalFormat("0.00");
-			String tmpAmount = df.format(amount);
-			double amount1 = Double.parseDouble(tmpAmount);
-			long money = (long) (amount1);
-			TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
-			long cash = c.getCash();
-			for (int i = 0; i < tb.length; i++) {
-				if ((tb[i].getTransactiontype().equals("buy") || tb[i].getTransactiontype().equals("request")) && tb[i].getCid() == c.getCid()) {
-					cash -= tb[i].getAmount();
-				}
-			}
-			if (cash - money < 0) {
+			String money = request.getParameter("cashValue");
+			double inputMoney = Double.parseDouble(money);
+			CustomerBean newCustomer = cDAO.read(customer.getCid());
+			if (inputMoney > newCustomer.getCash()) {
 				message.setMessage("I’m sorry, you must first deposit sufficient funds in your account in order to make this purchase");
 				return gson.toJson(message);
-//				errors.add("Sorry you don't have enough money");
-//				return "BuyFund.jsp";
 			}
-			transaction.setAmount(money);
-			transaction.setCid(c.getCid());
-			transaction.setFundid(fb[0].getFundid());
-			transaction.setTransactiontype("buy");
-			tDAO.create(transaction);
-			
+			FundBean[] fBeans = fDAO.match(MatchArg.equals("symbol", fundSymbol));
+			FundPriceHistoryBean[] fundPriceHistoryBeans = fphDAO.match(MatchArg.equals("fundid", fBeans[0].getFundid()));
+			int max = Integer.MIN_VALUE;
+			for (FundPriceHistoryBean fBean : fundPriceHistoryBeans) {
+				if (Integer.parseInt(fBean.getPricedate()) > max) {
+					max = Integer.parseInt(fBean.getPricedate());
+				}
+			}
+			FundPriceHistoryBean fBean = fphDAO.read(fBeans[0].getFundid(),new Integer(max).toString());
+			if (inputMoney < fBean.getPrice()) {
+				message.setMessage("I’m sorry, you must first deposit sufficient funds in your account in order to make this purchase");
+				return gson.toJson(message);
+			}
+			long share = (long) (inputMoney / fBean.getPrice());
+			PositionBean positionBean = pDAO.read(newCustomer.getCid(),fBeans[0].getFundid());
+			positionBean.setShares(share);
+			pDAO.update(positionBean);
+			newCustomer.setCash(newCustomer.getCash() - share * fBean.getPrice());
+			cDAO.update(newCustomer);
 			message.setMessage("The purchase was successfully completed");
 			return gson.toJson(message);
 		} 
-		
-//		catch (FormBeanException e) {
-//			errors.add(e.getMessage());
-//			return "error.jsp";
-//		} 
-		
 		catch (RollbackException e) {
 			message.setMessage(e.getMessage());
 			return gson.toJson(message);

@@ -45,7 +45,7 @@ public class FundPriceHistoryDAO extends GenericDAO<FundPriceHistoryBean> {
 		return null;
 	}
 
-	public long getRecentPrice(int fundid) throws ParseException, RollbackException {
+	/*public long getRecentPrice(int fundid) throws ParseException, RollbackException {
 		try {
 			Transaction.begin();
 			FundPriceHistoryBean[] fundHistoryBean = match(MatchArg.equals("fundid", fundid));
@@ -70,5 +70,5 @@ public class FundPriceHistoryDAO extends GenericDAO<FundPriceHistoryBean> {
 				Transaction.rollback();
 			}
 		} 
-	}
+	}*/
 }

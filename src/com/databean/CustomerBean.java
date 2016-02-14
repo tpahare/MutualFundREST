@@ -18,7 +18,7 @@ public class CustomerBean {
 	private String city;
 	private String state;
 	private String zip;
-	private long cash;
+	private double cash;
 	
 	
 	public CustomerBean() {
@@ -105,11 +105,11 @@ public class CustomerBean {
 		this.zip = zip;
 	}
 
-	public long getCash() {
+	public double getCash() {
 		return cash;
 	}
 
-	public void setCash(long cash) {
+	public void setCash(double cash) {
 		this.cash = cash;
 	}
 
