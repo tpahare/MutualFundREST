@@ -6,24 +6,24 @@ import java.util.List;
 import org.mybeans.form.FormBean;
 
 public class DepositeCheckForm extends FormBean {
-//	private String username;
-	private String amount;
+	private String username;
+	private String cash;
 	private String action;
 
-//	public String getUsername() {
-//		return username;
-//	}
-//
-//	public void setUsername(String username) {
-//		this.username = username;
-//	}
-
-	public String getAmount() {
-		return amount;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setAmount(String amount) {
-		this.amount = amount;
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getCash() {
+		return cash;
+	}
+
+	public void setCash(String cash) {
+		this.cash = cash;
 	}
 
 	public String getAction() {
@@ -40,22 +40,18 @@ public class DepositeCheckForm extends FormBean {
 
 	public List<String> getValidationErrors() {
 		List<String> errors = new ArrayList<String>();
-//		if (username == null || username.trim().length() == 0) {
-//			errors.add("Username not present");
-//		}
-//		if (username.matches(".*[<>\"].*")) {
-//			errors.add("Username may not contain angle brackets or quotes");
-//		}
+		if (username == null || username.trim().length() == 0) {
+			errors.add("Username not present");
+		}
+		if (username.matches(".*[<>\"].*")) {
+			errors.add("Username may not contain angle brackets or quotes");
+		}
 		
-		System.out.print("Step1:" + amount);
-		
-		if (amount == null || amount.trim().length() == 0) {
+		if (cash == null || cash.trim().length() == 0) {
 			errors.add("Amount is required");
 		}
 		
-		System.out.print("Step2:" + amount);
-		
-		if (amount.matches(".*[<>\"].*")) {
+		if (cash.matches(".*[<>\"].*")) {
 			errors.add("Amount may not contain angle brackets or quotes");
 		}
 		
@@ -63,15 +59,15 @@ public class DepositeCheckForm extends FormBean {
 			return errors;
 		}
 		try {
-			if(amount.matches(".*\\s+.*")) {
+			if(cash.matches(".*\\s+.*")) {
 				errors.add("Amount should be a number, no white spaces");
 				return errors;
 			}
-			if (Float.parseFloat(amount) <= 0) {
+			if (Float.parseFloat(cash) <= 0) {
 				errors.add("Amount can not be negetive");
 				return errors;
 			}
-			if (Float.parseFloat(amount) > 1000000) {
+			if (Float.parseFloat(cash) > 1000000) {
 				errors.add("Amount should be Less than one million");
 				return errors;
 			}
