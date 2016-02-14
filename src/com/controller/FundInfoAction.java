@@ -50,11 +50,19 @@ public class FundInfoAction extends Action {
 		request.setAttribute("fundInfo", fundInfo);
 		HttpSession session = request.getSession();
 		
+		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-		if(customer == null){
-//			errors.add("Please login First");
-//			return "CustomerLogin.do";
-			message.setMessage("You must login prior to prior to making this request");
+		
+		if(customer == null) {
+			
+			if(employee != null) {
+				message.setMessage("I am sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			
+//			errors.add("Please Login first");
+//			return "EmployeeLogin.do";
+			message.setMessage("You must log in prior to make that request");
 			return gson.toJson(message);
 		}
 		
