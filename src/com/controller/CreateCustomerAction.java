@@ -50,13 +50,21 @@ public class CreateCustomerAction extends Action{
 		request.setAttribute("errors", errors);	
 		
 		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
 		
 		if(employee == null) {
+			
+			if(customer != null) {
+				message.setMessage("I am sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			
 //			errors.add("Please Login first");
 //			return "EmployeeLogin.do";
 			message.setMessage("You must log in prior to make that request");
 			return gson.toJson(message);
 		}
+		
 		
 		try {		
 			//create a form instance and load data from req.
