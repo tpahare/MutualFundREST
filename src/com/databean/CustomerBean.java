@@ -13,8 +13,8 @@ public class CustomerBean {
 	private String firstname;
 	private String lastname;
 	private String password;
-	private String addrline1;
-	private String addrline2;
+	private String addr_line1;
+	private String addr_line2;
 	private String city;
 	private String state;
 	private String zip;
@@ -65,20 +65,20 @@ public class CustomerBean {
 		this.password = password;
 	}
 
-	public String getAddrline1() {
-		return addrline1;
+	public String getAddr_line1() {
+		return addr_line1;
 	}
 
-	public void setAddrline1(String addrline1) {
-		this.addrline1 = addrline1;
+	public void setAddr_line1(String addrline1) {
+		this.addr_line1 = addrline1;
 	}
 
-	public String getAddrline2() {
-		return addrline2;
+	public String getAddr_line2() {
+		return addr_line2;
 	}
 
-	public void setAddrline2(String addrline2) {
-		this.addrline2 = addrline2;
+	public void setAddr_line2(String addrline2) {
+		this.addr_line2 = addrline2;
 	}
 
 	public String getCity() {

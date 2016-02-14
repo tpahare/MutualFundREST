@@ -54,16 +54,17 @@ public class CreateCustomerForm extends FormBean{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getAddrline1() {
+	public String getAddr_line1() {
 		return addr_line1;
 	}
-	public void setAddrline1(String addrline1) {
+	public void setAddr_line1(String addrline1) {
 		this.addr_line1 = trimAndConvert(addrline1, "<>\"");
+		System.out.println();
 	}
-	public String getAddrline2() {
+	public String getAddr_line2() {
 		return addr_line2;
 	}
-	public void setAddrline2(String addrline2) {
+	public void setAddr_line2(String addrline2) {
 		this.addr_line2 = trimAndConvert(addrline2, "<>\"");
 	}
 	public String getCity() {

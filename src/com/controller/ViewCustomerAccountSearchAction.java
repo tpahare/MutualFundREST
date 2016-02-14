@@ -97,8 +97,8 @@ public class ViewCustomerAccountSearchAction extends Action{
 					viewCusBean.setUsername(customerBean.getUsername());
 					viewCusBean.setFirstname(customerBean.getFirstname());
 					viewCusBean.setLastname(customerBean.getLastname());
-					viewCusBean.setAddrline1(customerBean.getAddrline1());
-					viewCusBean.setAddrline2(customerBean.getAddrline2());
+					viewCusBean.setAddrline1(customerBean.getAddr_line1());
+					viewCusBean.setAddrline2(customerBean.getAddr_line2());
 					viewCusBean.setCity(customerBean.getCity());
 					viewCusBean.setState(customerBean.getState());
 					viewCusBean.setZip(customerBean.getZip());

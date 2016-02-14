@@ -97,8 +97,8 @@ public class CreateCustomerAction extends Action{
 		    cBean.setFirstname(form.getFirstname());
 		    cBean.setLastname(form.getLastname());
 		    cBean.setPassword(form.getPassword());
-		    cBean.setAddrline1(form.getAddrline1());
-		    cBean.setAddrline2(form.getAddrline2());
+		    cBean.setAddr_line1(form.getAddr_line1());
+		    cBean.setAddr_line2(form.getAddr_line2());
 		    cBean.setCity(form.getCity());
 		    cBean.setState(form.getState());
 		    cBean.setZip(form.getZip());

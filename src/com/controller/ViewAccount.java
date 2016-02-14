@@ -56,8 +56,8 @@ public class ViewAccount extends Action{
 				viewCusBean.setUsername(customerBeanNow.getUsername());
 				viewCusBean.setFirstname(customerBeanNow.getFirstname());
 				viewCusBean.setLastname(customerBeanNow.getLastname());
-				viewCusBean.setAddrline1(customerBeanNow.getAddrline1());
-				viewCusBean.setAddrline2(customerBeanNow.getAddrline2());
+				viewCusBean.setAddrline1(customerBeanNow.getAddr_line1());
+				viewCusBean.setAddrline2(customerBeanNow.getAddr_line2());
 				viewCusBean.setCity(customerBeanNow.getCity());
 				viewCusBean.setState(customerBeanNow.getState());
 				viewCusBean.setZip(customerBeanNow.getZip());
