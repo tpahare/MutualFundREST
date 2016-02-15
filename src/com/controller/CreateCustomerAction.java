@@ -55,7 +55,7 @@ public class CreateCustomerAction extends Action{
 		if(employee == null) {
 			
 			if(customer != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
 			
