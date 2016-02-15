@@ -53,7 +53,8 @@ public class DepositCheckAction extends Action {
 		if(employee == null) {
 			
 			if(customer1 != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I\'m sorry you are not authorized to perform that action");
+				System.out.println(message);
 				return gson.toJson(message);
 			}
 			message.setMessage("You must log in prior to make that request");
