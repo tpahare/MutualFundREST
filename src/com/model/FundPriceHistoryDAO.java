@@ -45,23 +45,30 @@ public class FundPriceHistoryDAO extends GenericDAO<FundPriceHistoryBean> {
 		return null;
 	}
 
-	public long getRecentPrice(int fundid) throws ParseException, RollbackException {
+	public double getRecentPrice(int fundid) throws ParseException, RollbackException {
 		try {
 			Transaction.begin();
 			FundPriceHistoryBean[] fundHistoryBean = match(MatchArg.equals("fundid", fundid));
 			Transaction.commit();
-			SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+			//SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			int i = 1;
-			long res = -1;
-			if (fundHistoryBean.length != 0) {
-				Date maxdate = sdf.parse(fundHistoryBean[0].getPricedate());
+			double res = -1;
+			/*if (fundHistoryBean.length != 0) {
+				//Date maxdate = sdf.parse(fundHistoryBean[0].getPricedate());
 				res = fundHistoryBean[0].getPrice();
 				while (i < fundHistoryBean.length) {
-					Date temp = sdf.parse(fundHistoryBean[i].getPricedate());
+					//Date temp = sdf.parse(fundHistoryBean[i].getPricedate());
 					if (maxdate.compareTo(temp) < 0) {
 						res = fundHistoryBean[i].getPrice();
 					}
 					i++;
+				}
+			}*/
+			int max = Integer.MIN_VALUE;
+			for (FundPriceHistoryBean fundPriceHistoryBean : fundHistoryBean) {
+				if (Integer.parseInt(fundPriceHistoryBean.getPricedate()) > max) {
+					max = Integer.parseInt(fundPriceHistoryBean.getPricedate());
+					res = fundPriceHistoryBean.getPrice();
 				}
 			}
 			return res;

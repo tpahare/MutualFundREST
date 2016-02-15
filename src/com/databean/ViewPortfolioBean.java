@@ -26,10 +26,4 @@ public class ViewPortfolioBean {
 		this.price = price;
 	}
 }
-/*
- * Array: “Funds”:[{“name”:”fund1”, “shares”: “numShares”,
-“price”:”currentFundPrice”}, …]
- String: cash (current balance in account)
 
- * 
- */

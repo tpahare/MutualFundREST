@@ -9,7 +9,7 @@ import org.genericdao.PrimaryKey;
 public class FundPriceHistoryBean {
 	private int fundid;
 	private String pricedate;
-	private long price;
+	private double price;
 	
 	public FundPriceHistoryBean() {
 		
@@ -31,11 +31,11 @@ public class FundPriceHistoryBean {
 		this.pricedate = pricedate;
 	}
 	
-	public long getPrice() {
+	public double getPrice() {
 		return price;
 	}
 	
-	public void setPrice(long price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	

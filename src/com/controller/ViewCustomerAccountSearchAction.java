@@ -102,7 +102,7 @@ public class ViewCustomerAccountSearchAction extends Action{
 					viewCusBean.setCity(customerBean.getCity());
 					viewCusBean.setState(customerBean.getState());
 					viewCusBean.setZip(customerBean.getZip());
-					viewCusBean.setCash(customerBean.getCash());
+					//viewCusBean.setCash(customerBean.getCash());
 					
 					//other data load
 					
