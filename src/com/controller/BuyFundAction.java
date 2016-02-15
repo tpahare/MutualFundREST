@@ -90,7 +90,7 @@ public class BuyFundAction extends Action {
 				positionBean.setShares(share);
 				pDAO.create(positionBean);
 			} else {
-				positionBean.setShares(share);
+				positionBean.setShares(positionBean.getShares() + share);
 				pDAO.update(positionBean);
 			}
 			newCustomer.setCash(newCustomer.getCash() - share * fBean.getPrice());
