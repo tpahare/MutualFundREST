@@ -82,8 +82,8 @@ public class DepositCheckAction extends Action {
 			
 			String username = form.getUsername();
 			if (username == null || username.length() == 0) {
-				errors.add("I’m sorry, there was a problem depositing the money");
-				message.setMessage(errors.toString());
+				//errors.add("I’m sorry, there was a problem depositing the money");
+				message.setMessage("I am sorry, there was a problem depositing the money");
 				return gson.toJson(message);
 			}
 	        request.setAttribute("username", username);
@@ -120,17 +120,17 @@ public class DepositCheckAction extends Action {
 			
 			
 			//System.out.println("hh");
-			SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
+			//SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy");
 			CustomerBean customer = customerDAO.read(id);
-			TransactionBean tBean = new TransactionBean();
-			tBean.setCid(id);
-			tBean.setTransactiontype("deposit");
-			tBean.setExecutedate(format.format(new Date()));
-			long depositmoney = (long) (Double.parseDouble(form.getCash()));
+			//TransactionBean tBean = new TransactionBean();
+			//tBean.setCid(id);
+			//tBean.setTransactiontype("deposit");
+			//tBean.setExecutedate(format.format(new Date()));
+			double depositmoney = Double.parseDouble(form.getCash());
 			customer.setCash(customer.getCash()+depositmoney);
-			tBean.setAmount(depositmoney);
+			//tBean.setAmount(depositmoney);
 			
-			trancDAO.create(tBean);
+			//trancDAO.create(tBean);
 			customerDAO.update(customer);
 			//System.out.print("look 5");
 			message.setMessage("The account has been successfully updated");

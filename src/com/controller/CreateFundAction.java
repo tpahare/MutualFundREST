@@ -91,10 +91,27 @@ public class CreateFundAction extends Action {
 
 			fphBean.setFundid(fund2[0].getFundid());
 			fphBean.setPrice(10);
-			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-			Date date = new Date();
-			fphBean.setPricedate(dateFormat.format(date));
-			fphDAO.create(fphBean);
+			
+			//PriceDate
+			if (fphDAO.match().length == 0) {
+				fphBean.setPricedate("1");
+				fphDAO.create(fphBean);
+			} else {
+				FundPriceHistoryBean[] fundPriceHistoryBeans = fphDAO.match(MatchArg.equals("fundid", fund2[0].getFundid()));
+				int max = Integer.MIN_VALUE;
+				for (FundPriceHistoryBean fBean : fundPriceHistoryBeans) {
+					if (Integer.parseInt(fBean.getPricedate()) > max) {
+						max = Integer.parseInt(fBean.getPricedate());
+					}
+				}
+				fphBean.setPricedate(Integer.toString(max));
+				fphDAO.create(fphBean);
+			}
+			
+//			SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+//			Date date = new Date();
+//			fphBean.setPricedate(dateFormat.format(date));
+//			fphDAO.create(fphBean);
 			message.setMessage("The fund has been successfully created");
 			return gson.toJson(message);
 		} catch (RollbackException e) {
