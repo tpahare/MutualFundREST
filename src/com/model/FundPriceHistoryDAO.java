@@ -12,6 +12,7 @@ import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 
 import com.databean.FundPriceHistoryBean;
+import com.sun.beans.editors.IntegerEditor;
 
 public class FundPriceHistoryDAO extends GenericDAO<FundPriceHistoryBean> {
 	public FundPriceHistoryDAO(ConnectionPool cp, String tablename) throws DAOException {
@@ -44,7 +45,24 @@ public class FundPriceHistoryDAO extends GenericDAO<FundPriceHistoryBean> {
 		}
 		return null;
 	}
-
+	public String getMaxDate(int fundid) throws ParseException, RollbackException {
+		try {
+			Transaction.begin();
+			FundPriceHistoryBean[] fundPriceHistoryBeans = match(MatchArg.equals("fundid",fundid));
+			Transaction.commit();
+			int max = Integer.MIN_VALUE;
+			for (FundPriceHistoryBean fundPriceHistoryBean : fundPriceHistoryBeans) {
+				if (Integer.parseInt(fundPriceHistoryBean.getPricedate()) > max) {
+					max = Integer.parseInt(fundPriceHistoryBean.getPricedate());
+				}
+			}
+			return new Integer(max).toString();
+		} finally {
+			if (Transaction.isActive()) {
+				Transaction.rollback();
+			}
+		}
+	}
 	public double getRecentPrice(int fundid) throws ParseException, RollbackException {
 		try {
 			Transaction.begin();
@@ -53,17 +71,6 @@ public class FundPriceHistoryDAO extends GenericDAO<FundPriceHistoryBean> {
 			//SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 			int i = 1;
 			double res = -1;
-			/*if (fundHistoryBean.length != 0) {
-				//Date maxdate = sdf.parse(fundHistoryBean[0].getPricedate());
-				res = fundHistoryBean[0].getPrice();
-				while (i < fundHistoryBean.length) {
-					//Date temp = sdf.parse(fundHistoryBean[i].getPricedate());
-					if (maxdate.compareTo(temp) < 0) {
-						res = fundHistoryBean[i].getPrice();
-					}
-					i++;
-				}
-			}*/
 			int max = Integer.MIN_VALUE;
 			for (FundPriceHistoryBean fundPriceHistoryBean : fundHistoryBean) {
 				if (Integer.parseInt(fundPriceHistoryBean.getPricedate()) > max) {

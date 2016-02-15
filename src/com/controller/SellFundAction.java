@@ -14,106 +14,68 @@ import java.text.*;
 import com.databean.*;
 import com.form.*;
 import com.model.*;
-
+import com.sun.xml.internal.ws.util.xml.CDATA;
+import com.google.gson.Gson;
+import com.view.Message;
 public class SellFundAction extends Action {
 	TrancDAO tDAO;
 	PositionDAO pDAO;
 	FundDAO fDAO;
 	FundPriceHistoryDAO fphDAO;
+	CustomerDAO cDAO;
+	Message message;
+	Gson gson;
 	public SellFundAction(Model model) {
+		cDAO = model.getCustomerDAO();
 		tDAO = model.getTrancDAO();
 		pDAO = model.getPosDAO();
 		fDAO = model.getFundDAO();
 		fphDAO = model.getFundPriceHistoryDAO();
+		message = new Message();
+		gson = new Gson();
 	}
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "SellFund.do";
+		return "SellFund";
 	}
-
 	@Override
 	public String perform(HttpServletRequest request) {
 		List<String> errors = new ArrayList<String>();
 		request.setAttribute("errors", errors);
 		HttpSession session = request.getSession();
+		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-		if(customer == null){
-			errors.add("Please login first");
-			return "CustomerLogin.do";
+		if(customer == null) {
+			if(employee != null) {
+				message.setMessage("I am sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			message.setMessage("You must log in prior to make that request");
+			return gson.toJson(message);
 		}
-		
 		try {
-			//CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-			List<FundInfoBean> fundInfo = new ArrayList<FundInfoBean>();
-			PositionBean[] pb = pDAO.match(MatchArg.equals("customerid", customer.getCid()));
-			for (int i = 0; i < pb.length; i++) {
-				FundBean fb = fDAO.read(pb[i].getFundid());
-				long recentPrice = fphDAO.getRecentPrice(pb[i].getFundid());
-				fundInfo.add(new FundInfoBean(fb.getFundid(), fb.getSymbol(), fb.getName(), pb[i].getShares(), recentPrice * pb[i].getShares()));
+			String fundSymbol = request.getParameter("fundSymbol");
+			String numShares = request.getParameter("numShares");
+			CustomerBean customerBean = cDAO.read(customer.getCid());
+			long shares = Integer.parseInt(numShares);
+			FundBean[] fundBeans = fDAO.match(MatchArg.equals("symbol", fundSymbol));
+			PositionBean positionBean = pDAO.read(customerBean.getCid(),fundBeans[0].getFundid());
+			if (shares > positionBean.getShares()) {
+				message.setMessage("I’m sorry, you must first deposit sufficient funds in your account in order to make this purchase");
+				return gson.toJson(message);
 			}
-			request.setAttribute("fundInfo", fundInfo);
-			//Map<String, String[]> map = request.getParameterMap();
-			String shareSell = request.getParameter("shareSell");
-			if (shareSell == null || shareSell.length() == 0) {
-				errors.add("Share amount can not be empty!");
-				return "FundInfo.jsp";
-			}
-			
-			try {
-				double tmp = Double.parseDouble(shareSell);
-			} catch (Exception e) {
-				errors.add("Your input should be a number");
-				return "FundInfo.jsp";
-			}
-			BigDecimal bg = new BigDecimal(shareSell);
-			if (bg.doubleValue() <= 0) {
-				errors.add("Your input can not be negative");
-				return "FundInfo.jsp";
-			}
-			if (bg.scale() > 3) {
-				errors.add("Your input should only have at most three decimal places");
-				return "FundInfo.jsp";
-			}
-			if (bg.doubleValue() < 1) {
-				errors.add("Your can only sell share which is more than 1");
-				return "FundInfo.jsp";
-			}
-			double share = Double.parseDouble(shareSell);
-			String fundid = request.getParameter("fundid");
-			PositionBean pos = pDAO.read(customer.getCid(), Integer.parseInt(fundid));
-			if (pos == null) {
-				errors.add("You don't have this fund");
-				return "FundInfo.jsp";
-			}
-			long allshare = pos.getShares();
-			TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
-			for (int i = 0; i < tb.length; i++) {
-				if (tb[i].getCid() == customer.getCid() && tb[i].getFundid() == Integer.parseInt(fundid) && tb[i].getTransactiontype().equals("sell")) {
-					allshare -= tb[i].getShares();
-				}
-			}
-			if (allshare - (long) (share * 1000) < 0) {
-				errors.add("You don't have enough share");
-				return "FundInfo.jsp";
-			}
-			long Share = (long) (share * 1000);
-			TransactionBean transaction = new TransactionBean();
-			transaction.setCid(customer.getCid());
-			transaction.setFundid(Integer.parseInt(fundid));
-			transaction.setShares(Share);
-			transaction.setTransactiontype("sell");
-			tDAO.create(transaction);
-			return "SellFundSuccess.jsp";
-		} catch (RollbackException e) {
-			errors.add(e.getMessage());
-			return "error.jsp";
-		} catch (ParseException e) {
-			errors.add(e.getMessage());
-			return "error.jsp";
-		} catch (NumberFormatException e){
-			errors.add("Your input should be a number");
-			return "FundInfo.jsp";
+			double price = fphDAO.getRecentPrice(fundBeans[0].getFundid());
+			double amount = price * shares;
+			customerBean.setCash(customerBean.getCash() + amount);
+			cDAO.update(customerBean);
+			positionBean.setShares(positionBean.getShares() - shares);
+			pDAO.update(positionBean);
+			message.setMessage("The purchase was successfully completed");
+			return gson.toJson(message);
+		} catch (Exception e) {
+			message.setMessage(e.getMessage());
+			return gson.toJson(message);
 		}
 	}
 
