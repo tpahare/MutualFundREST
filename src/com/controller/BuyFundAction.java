@@ -83,8 +83,16 @@ public class BuyFundAction extends Action {
 			}
 			long share = (long) (inputMoney / fBean.getPrice());
 			PositionBean positionBean = pDAO.read(newCustomer.getCid(),fBeans[0].getFundid());
-			positionBean.setShares(share);
-			pDAO.update(positionBean);
+			if (positionBean == null) {
+				positionBean = new PositionBean();
+				positionBean.setFundid(fBeans[0].getFundid());
+				positionBean.setCustomerid(newCustomer.getCid());
+				positionBean.setShares(share);
+				pDAO.create(positionBean);
+			} else {
+				positionBean.setShares(share);
+				pDAO.update(positionBean);
+			}
 			newCustomer.setCash(newCustomer.getCash() - share * fBean.getPrice());
 			cDAO.update(newCustomer);
 			message.setMessage("The purchase was successfully completed");
