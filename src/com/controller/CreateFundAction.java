@@ -90,7 +90,7 @@ public class CreateFundAction extends Action {
 			FundPriceHistoryBean fphBean = new FundPriceHistoryBean();
 
 			fphBean.setFundid(fund2[0].getFundid());
-			fphBean.setPrice(10);
+			fphBean.setPrice(Double.parseDouble(request.getParameter("initial_value")));
 			
 			//PriceDate
 			if (fphDAO.match().length == 0) {

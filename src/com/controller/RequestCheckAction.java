@@ -49,9 +49,9 @@ public class RequestCheckAction extends Action {
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
 		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
 		
-		if(employee == null) {
+		if(customer == null) {
 			
-			if(customer != null) {
+			if(employee != null) {
 				message.setMessage("I am sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
@@ -99,7 +99,7 @@ public class RequestCheckAction extends Action {
 			//tBean.setCid(customer.getCid());
 			//tBean.setTransactiontype("request");
 			
-			long requestMoney = (long) (Double.parseDouble(form.getCashValue()));
+			Double requestMoney = Double.parseDouble(form.getCashValue());
 			//TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
 			//CustomerBean c = customerDAO.read(customer.getCid());
 			double cash = customer.getCash();
