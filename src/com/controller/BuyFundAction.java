@@ -60,7 +60,6 @@ public class BuyFundAction extends Action {
 			return gson.toJson(message);
 		}
 		try {
-
 			String fundSymbol = request.getParameter("fundSymbol");
 			String money = request.getParameter("cashValue");
 			double inputMoney = Double.parseDouble(money);

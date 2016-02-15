@@ -108,7 +108,7 @@ public class CreateFundAction extends Action {
 				fphBean.setPricedate("1");
 				fphDAO.create(fphBean);
 			} else {
-				FundPriceHistoryBean[] fundPriceHistoryBeans = fphDAO.match(MatchArg.equals("fundid", fund2[0].getFundid()));
+				FundPriceHistoryBean[] fundPriceHistoryBeans = fphDAO.match();
 				int max = Integer.MIN_VALUE;
 				for (FundPriceHistoryBean fBean : fundPriceHistoryBeans) {
 					if (Integer.parseInt(fBean.getPricedate()) > max) {
