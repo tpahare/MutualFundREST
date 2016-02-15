@@ -61,7 +61,7 @@ public class ViewAccount extends Action{
 				viewCusBean.setCity(customerBeanNow.getCity());
 				viewCusBean.setState(customerBeanNow.getState());
 				viewCusBean.setZip(customerBeanNow.getZip());
-				viewCusBean.setCash(customerBeanNow.getCash());
+				//viewCusBean.setCash(customerBeanNow.getCash());
 				
 				//other data load
 				
