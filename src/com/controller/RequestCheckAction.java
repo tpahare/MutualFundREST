@@ -95,9 +95,9 @@ public class RequestCheckAction extends Action {
 //			long money = (long) (100 * amount1);
 			
 			
-			TransactionBean tBean = new TransactionBean();
-			tBean.setCid(customer.getCid());
-			tBean.setTransactiontype("request");
+			//TransactionBean tBean = new TransactionBean();
+			//tBean.setCid(customer.getCid());
+			//tBean.setTransactiontype("request");
 			
 			long requestMoney = (long) (Double.parseDouble(form.getCashValue()));
 			//TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
@@ -116,9 +116,9 @@ public class RequestCheckAction extends Action {
 				return gson.toJson(message);
 			}
 			
-			tBean.setAmount(requestMoney);
-			tBean.setExecutedate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
-			tDAO.create(tBean);
+			//tBean.setAmount(requestMoney);
+			//tBean.setExecutedate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
+			//tDAO.create(tBean);
 			customer.setCash(cash-requestMoney);
 			customerDAO.update(customer);
 			//System.out.print("look 5");
