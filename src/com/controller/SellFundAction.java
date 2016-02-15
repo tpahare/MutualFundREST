@@ -16,6 +16,7 @@ import com.form.*;
 import com.model.*;
 import com.sun.xml.internal.ws.util.xml.CDATA;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.view.Message;
 public class SellFundAction extends Action {
 	TrancDAO tDAO;
@@ -32,7 +33,7 @@ public class SellFundAction extends Action {
 		fDAO = model.getFundDAO();
 		fphDAO = model.getFundPriceHistoryDAO();
 		message = new Message();
-		gson = new Gson();
+		gson = new GsonBuilder().disableHtmlEscaping().create();
 	}
 	@Override
 	public String getName() {
@@ -48,10 +49,10 @@ public class SellFundAction extends Action {
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
 		if(customer == null) {
 			if(employee != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
-			message.setMessage("You must log in prior to make that request");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		try {
@@ -62,7 +63,7 @@ public class SellFundAction extends Action {
 			FundBean[] fundBeans = fDAO.match(MatchArg.equals("symbol", fundSymbol));
 			PositionBean positionBean = pDAO.read(customerBean.getCid(),fundBeans[0].getFundid());
 			if (shares > positionBean.getShares()) {
-				message.setMessage("I’m sorry, you must first deposit sufficient funds in your account in order to make this purchase");
+				message.setMessage("I'm sorry, you must first deposit sufficient funds in your account in order to make this purchase");
 				return gson.toJson(message);
 			}
 			double price = fphDAO.getRecentPrice(fundBeans[0].getFundid());

@@ -16,11 +16,13 @@ import org.genericdao.RollbackException;
 import org.mybeans.form.FormBeanException;
 import org.mybeans.form.FormBeanFactory;
 
+import com.databean.CustomerBean;
 import com.databean.EmployeeBean;
 import com.databean.FundBean;
 import com.databean.FundPriceHistoryBean;
 import com.form.CreateFundForm;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.FundDAO;
 import com.model.FundPriceHistoryDAO;
 import com.model.Model;
@@ -30,7 +32,7 @@ public class CreateFundAction extends Action {
 	private FormBeanFactory<CreateFundForm> formBeanFactory = FormBeanFactory.getInstance(CreateFundForm.class);
 	FundDAO fundDAO;
 	FundPriceHistoryDAO fphDAO;
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	Message message = new Message();
 
 	public CreateFundAction(Model model) {
@@ -51,13 +53,22 @@ public class CreateFundAction extends Action {
 		List<String> errors = new ArrayList<String>();
 		request.setAttribute("errors", errors);
 
-		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		/*EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
 
 		if (employee == null) {
 			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
+		}*/
+		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
+		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
+		if(employee == null) {
+			if(customer != null) {
+				message.setMessage("I'm sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			message.setMessage("You must log in prior to making this request");
+			return gson.toJson(message);
 		}
-
 		try {
 			CreateFundForm form = formBeanFactory.create(request);
 			request.setAttribute("form", form);

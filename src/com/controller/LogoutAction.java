@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.view.Message;
 
 /**
@@ -24,7 +25,7 @@ public class LogoutAction extends Action{
 		
 		//invalidate the session and go to login page
     	Message message = new Message();
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     	HttpSession session = request.getSession(false);
         session.setAttribute("customer",null);
         session.setAttribute("employee", null);

@@ -16,6 +16,7 @@ import java.text.*;
 import com.databean.*;
 import com.form.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.*;
 import com.view.Message;
 public class BuyFundAction extends Action {
@@ -25,7 +26,7 @@ public class BuyFundAction extends Action {
 	FundDAO fDAO;
 	FundPriceHistoryDAO fphDAO;
 	PositionDAO pDAO;
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	Message message = new Message();
 	
 	public BuyFundAction(Model model) {
@@ -68,7 +69,7 @@ public class BuyFundAction extends Action {
 			double inputMoney = Double.parseDouble(money);
 			CustomerBean newCustomer = cDAO.read(customer.getCid());
 			if (inputMoney > newCustomer.getCash()) {
-				message.setMessage("I’m sorry, you must first deposit sufficient funds in your account in order to make this purchase");
+				message.setMessage("I'm sorry, you must first deposit sufficient funds in your account in order to make this purchase");
 				return gson.toJson(message);
 			}
 			FundBean[] fBeans = fDAO.match(MatchArg.equals("symbol", fundSymbol));
@@ -81,7 +82,7 @@ public class BuyFundAction extends Action {
 			}
 			FundPriceHistoryBean fBean = fphDAO.read(fBeans[0].getFundid(),new Integer(max).toString());
 			if (inputMoney < fBean.getPrice()) {
-				message.setMessage("I’m sorry, you must first deposit sufficient funds in your account in order to make this purchase");
+				message.setMessage("I'm sorry, you must first deposit sufficient funds in your account in order to make this purchase");
 				return gson.toJson(message);
 			}
 			long share = (long) (inputMoney / fBean.getPrice());

@@ -18,6 +18,7 @@ import com.form.*;
 import com.model.*;
 //import com.sun.xml.internal.ws.api.message.Message;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.view.Message;
 public class TransitionDayAction extends Action {
 	CustomerDAO cDAO;
@@ -33,7 +34,7 @@ public class TransitionDayAction extends Action {
 		fDAO = model.getFundDAO();
 		fphDAO = model.getFundPriceHistoryDAO();
 		pDAO = model.getPosDAO();
-		gson = new Gson();
+		gson = new GsonBuilder().disableHtmlEscaping().create();
 		message = new Message();
 	}
 	@Override
@@ -54,10 +55,10 @@ public class TransitionDayAction extends Action {
 		if(employee == null) {
 			
 			if(customer != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
-			message.setMessage("You must log in prior to make that request");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		try {

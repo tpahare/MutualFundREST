@@ -18,6 +18,7 @@ import com.databean.CustomerBean;
 import com.databean.EmployeeBean;
 import com.form.CreateCustomerForm;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.CustomerDAO;
 import com.model.Model;
 import com.view.Menu;
@@ -27,7 +28,7 @@ public class CreateCustomerAction extends Action{
 
 	private FormBeanFactory<CreateCustomerForm> formBeanFactory = FormBeanFactory.getInstance(CreateCustomerForm.class);
 	private CustomerDAO cDAO;
-	private Gson gson = new Gson();
+	private Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	private Message message = new Message();
 	
 	//constructor
@@ -55,13 +56,13 @@ public class CreateCustomerAction extends Action{
 		if(employee == null) {
 			
 			if(customer != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to preform that action");
 				return gson.toJson(message);
 			}
 			
 //			errors.add("Please Login first");
 //			return "EmployeeLogin.do";
-			message.setMessage("You must log in prior to make that request");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		
@@ -85,7 +86,7 @@ public class CreateCustomerAction extends Action{
 		        if(errors.size()>0) {
 		        	
 //		        	return "CreateCustomer.jsp";
-		        	message.setMessage("I am sorry there was problem creating the account");
+		        	message.setMessage("I'm sorry, there was problem creating the account");
 		        	return gson.toJson(message);
 		        }
 	        
@@ -94,7 +95,7 @@ public class CreateCustomerAction extends Action{
 		        if(customerBean.length>0) {
 //		        	errors.add("Username already exists");
 //		        	return "CreateCustomer.jsp";
-		        	message.setMessage("I am sorry there was problem creating the account(Duplicate Account)");
+		        	message.setMessage("I'm sorry, there was a problem creating the account");
 		        	return gson.toJson(message);
 		        }
 		        

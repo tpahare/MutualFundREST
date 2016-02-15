@@ -14,6 +14,7 @@ import java.text.*;
 import com.databean.*;
 import com.form.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.*;
 import com.view.Menu;
 import com.view.Message;
@@ -25,7 +26,7 @@ public class FundInfoAction extends Action {
 	FundPriceHistoryDAO fphDAO;
 	CustomerDAO cDAO;
 	
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	Message message = new Message();
 	Menu menu = new Menu();
 	
@@ -56,13 +57,13 @@ public class FundInfoAction extends Action {
 		if(customer == null) {
 			
 			if(employee != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
 			
 //			errors.add("Please Login first");
 //			return "EmployeeLogin.do";
-			message.setMessage("You must log in prior to make that request");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		
@@ -87,7 +88,7 @@ public class FundInfoAction extends Action {
 			String cash = String.valueOf(customerBeanNow.getCash());
 			
 			if(fundInfo.size()==0) {
-				message.setMessage("You do not have any funds at this time");
+				message.setMessage("You don't have any funds at this time");
 				return gson.toJson(message);
 			}
 			

@@ -18,6 +18,7 @@ import com.databean.EmployeeBean;
 import com.databean.TransactionBean;
 import com.form.DepositeCheckForm;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.CustomerDAO;
 import com.model.Model;
 import com.model.TrancDAO;
@@ -28,7 +29,7 @@ public class DepositCheckAction extends Action {
 	private FormBeanFactory<DepositeCheckForm> formBeanFactory = FormBeanFactory.getInstance(DepositeCheckForm.class);
 	CustomerDAO customerDAO;
 	TrancDAO trancDAO;
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	Message message = new Message();
 	public DepositCheckAction(Model model) {
 		this.customerDAO = model.getCustomerDAO();
@@ -53,11 +54,11 @@ public class DepositCheckAction extends Action {
 		if(employee == null) {
 			
 			if(customer1 != null) {
-				message.setMessage("I\'m sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to perform that action");
 				System.out.println(message);
 				return gson.toJson(message);
 			}
-			message.setMessage("You must log in prior to make that request");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		
@@ -83,7 +84,7 @@ public class DepositCheckAction extends Action {
 			String username = form.getUsername();
 			if (username == null || username.length() == 0) {
 				//errors.add("I’m sorry, there was a problem depositing the money");
-				message.setMessage("I am sorry, there was a problem depositing the money");
+				message.setMessage("I'm sorry, there was a problem depositing the money");
 				return gson.toJson(message);
 			}
 	        request.setAttribute("username", username);

@@ -21,6 +21,7 @@ import com.databean.TransactionBean;
 import com.form.DepositeCheckForm;
 import com.form.RequestCheckForm;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.CustomerDAO;
 import com.model.Model;
 import com.model.TrancDAO;
@@ -31,7 +32,7 @@ public class RequestCheckAction extends Action {
 	CustomerDAO customerDAO;
 	TrancDAO tDAO;
 	Message message = new Message();
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	public RequestCheckAction(Model model) {
 		this.customerDAO = model.getCustomerDAO();
 		this.tDAO = model.getTrancDAO();
@@ -52,11 +53,11 @@ public class RequestCheckAction extends Action {
 		if(customer == null) {
 			
 			if(employee != null) {
-				message.setMessage("I am sorry you are not authorized to perform that action");
+				message.setMessage("I'm sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
 			
-			message.setMessage("You must log in prior to make that request");
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		
