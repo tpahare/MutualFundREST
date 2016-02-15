@@ -90,7 +90,7 @@ public class LoginAction extends Action {
 					return gson.toJson(message);
 				}
 
-			message.setMessage("Welcome' " + employee[0].getFirstname() + " " + employee[0].getLastname());
+			message.setMessage("Welcome " + employee[0].getFirstname() + " " + employee[0].getLastname());
 			// Attach (this copy of) the employee bean to the session
 			session.setAttribute("employee", employee[0]);
 			session.setAttribute("customer", null);
