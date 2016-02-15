@@ -40,7 +40,7 @@ public class TransitionDayAction extends Action {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "TransitionDay";
+		return "transitionDay";
 	}
 
 	@Override

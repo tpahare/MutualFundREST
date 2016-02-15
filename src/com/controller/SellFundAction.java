@@ -72,7 +72,7 @@ public class SellFundAction extends Action {
 			cDAO.update(customerBean);
 			positionBean.setShares(positionBean.getShares() - shares);
 			pDAO.update(positionBean);
-			message.setMessage("The purchase was successfully completed");
+			message.setMessage("The sale was successfully completed");
 			return gson.toJson(message);
 		} catch (Exception e) {
 			message.setMessage(e.getMessage());
