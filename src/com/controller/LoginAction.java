@@ -13,6 +13,7 @@ import org.mybeans.form.FormBeanException;
 import org.mybeans.form.FormBeanFactory;
 import com.form.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.model.*;
 import com.view.Menu;
 import com.view.Message;
@@ -29,7 +30,7 @@ public class LoginAction extends Action {
 	///
 	private EmployeeDAO eDAO;
 	private CustomerDAO cDAO;
-	Gson gson = new Gson();
+	Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 	Message message = new Message();
 	Menu menu = new Menu();
 
