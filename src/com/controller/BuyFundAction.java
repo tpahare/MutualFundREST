@@ -51,9 +51,8 @@ public class BuyFundAction extends Action {
 		
 		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-		if(employee == null) {
-			
-			if(customer != null) {
+		if(customer == null) {
+			if(employee != null) {
 				message.setMessage("I'm sorry you are not authorized to perform that action");
 				return gson.toJson(message);
 			}
