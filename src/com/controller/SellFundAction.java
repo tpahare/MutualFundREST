@@ -38,7 +38,7 @@ public class SellFundAction extends Action {
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "SellFund";
+		return "sellFund";
 	}
 	@Override
 	public String perform(HttpServletRequest request) {
