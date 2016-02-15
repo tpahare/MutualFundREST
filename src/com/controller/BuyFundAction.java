@@ -49,17 +49,15 @@ public class BuyFundAction extends Action {
 		List<String> errors = new ArrayList<String>();
 		request.setAttribute("errors", errors);
 		
-		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-		if(customer == null){
-//			errors.add("Please login first");
-//			return "CustomerLogin.do";
-			message.setMessage("You must log in prior to making this request");
-			return gson.toJson(message);
-		}
-		
 		EmployeeBean employee = (EmployeeBean) session.getAttribute("employee");
-		if(employee == null){
-			message.setMessage("I'm sorry you are not authorized to preform that action");
+		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
+		if(employee == null) {
+			
+			if(customer != null) {
+				message.setMessage("I'm sorry you are not authorized to perform that action");
+				return gson.toJson(message);
+			}
+			message.setMessage("You must log in prior to making this request");
 			return gson.toJson(message);
 		}
 		try {
