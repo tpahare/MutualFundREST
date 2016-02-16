@@ -69,7 +69,7 @@ public class LoginAction extends Action {
 			// Any validation errors?
 			errors.addAll(form.getValidationErrors());
 			if (errors.size() != 0) {
-				message.setMessage(errors.toString());
+				message.setMessage("The username/password combination that you entered is not correct");
 				return gson.toJson(message);
 			}
 

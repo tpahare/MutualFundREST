@@ -37,10 +37,10 @@ public class LoginForm extends FormBean {
     public List<String> getValidationErrors() {
     	System.out.println("Form Username: " + username);
         List<String> errors = new ArrayList<String>();
-        if (username == null || username.trim().length() == 0)
-            errors.add("Username is required");
-        if (password == null || password.length() == 0)
-            errors.add("Password is required");
+        if (username == null || username.trim().length() == 0 || password == null || password.length() == 0)
+            errors.add("The username/password combination that you entered is not correct");
+//        if (password == null || password.length() == 0)
+//            errors.add("The username/password combination that you entered is not correct");
         
       /*  if (!action.equals("Login"))
             errors.add("Invalid action");*/
