@@ -103,7 +103,8 @@ public class RequestCheckAction extends Action {
 			Double requestMoney = Double.parseDouble(form.getCashValue());
 			//TransactionBean[] tb = tDAO.match(MatchArg.equals("executedate", null));
 			//CustomerBean c = customerDAO.read(customer.getCid());
-			double cash = customer.getCash();
+			CustomerBean newCustomer = customerDAO.read(customer.getCid());
+			double cash = newCustomer.getCash();
 		/*	for (int i = 0; i < tb.length; i++) {
 				if (tb[i].getTransactiontype().equals("buy") && tb[i].getCid() == customer.getCid()) {
 					cash -= tb[i].getAmount();
@@ -120,8 +121,8 @@ public class RequestCheckAction extends Action {
 			//tBean.setAmount(requestMoney);
 			//tBean.setExecutedate(new SimpleDateFormat("MM/dd/yyyy").format(new Date()));
 			//tDAO.create(tBean);
-			customer.setCash(cash-requestMoney);
-			customerDAO.update(customer);
+			newCustomer.setCash(cash-requestMoney);
+			customerDAO.update(newCustomer);
 			//System.out.print("look 5");
 			message.setMessage("The withdrawal was successfully completed");
 			return gson.toJson(message);
