@@ -81,7 +81,7 @@ public class FundInfoAction extends Action {
 				FundBean fb = fDAO.read(pb[i].getFundid());
 				double recentPrice = fphDAO.getRecentPrice(pb[i].getFundid());
 //				fundInfo.add(new FundInfoBean(fb.getFundid(), fb.getSymbol(), fb.getName(), pb[i].getShares(), recentPrice * pb[i].getShares()));
-				fundInfo.add(new FundInfoBean1(fb.getName(), String.valueOf(pb[i].getShares()), String.valueOf(recentPrice)));
+				fundInfo.add(new FundInfoBean1(fb.getSymbol(), String.valueOf(pb[i].getShares()), String.valueOf(recentPrice)));
 			}
 			
 			CustomerBean customerBeanNow = cDAO.read(customer.getCid());
